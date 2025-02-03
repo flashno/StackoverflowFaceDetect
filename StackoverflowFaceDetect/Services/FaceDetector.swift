@@ -11,38 +11,29 @@ import UIKit
 
 class FaceDetector {
     static let shared = FaceDetector()
-    private let detector: CIDetector?
+    private let detector = CIDetector(ofType: CIDetectorTypeFace, context: nil)
     
-    init() {
-        let options: [String: Any] = [
-            CIDetectorAccuracy: CIDetectorAccuracyHigh,
-            CIDetectorSmile: true,
-            CIDetectorEyeBlink: true,
-            CIDetectorNumberOfAngles: 3
-        ]
-        detector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: options)
-    }
-    
-    func detectFaces(in image: UIImage) -> [FaceMetadata] {
-        guard let ciImage = CIImage(image: image) else { return [] }
-        
-        // Convert UIImage orientation to CGImagePropertyOrientation
-        let cgOrientation = CGImagePropertyOrientation(image.imageOrientation)
-        
-        let features = detector?.features(in: ciImage, options: [
-            CIDetectorSmile: true,
-            CIDetectorEyeBlink: true,
-            CIDetectorImageOrientation: cgOrientation.rawValue // Now using correct raw value
-        ]) ?? []
-        
-        return features.compactMap { $0 as? CIFaceFeature }.map {
-            FaceMetadata(
-                bounds: $0.bounds,
-                hasSmile: $0.hasSmile,
-                isLeftEyeClosed: $0.leftEyeClosed,
-                isRightEyeClosed: $0.rightEyeClosed,
-                faceAngle: Double($0.faceAngle)
-            )
+    func detectFaceFeatures(in image: UIImage) -> FaceMetadata {
+        guard let ciImage = CIImage(image: image) else {
+            return FaceMetadata(bounds: .zero, hasFace: false,
+                              hasSmile: false, isLeftEyeClosed: false,
+                              isRightEyeClosed: false, faceAngle: 0)
         }
+        
+        let features = detector?.features(in: ciImage) ?? []
+        guard let faceFeature = features.first as? CIFaceFeature else {
+            return FaceMetadata(bounds: .zero, hasFace: false,
+                              hasSmile: false, isLeftEyeClosed: false,
+                              isRightEyeClosed: false, faceAngle: 0)
+        }
+        
+        return FaceMetadata(
+            bounds: faceFeature.bounds,
+            hasFace: true,
+            hasSmile: faceFeature.hasSmile,
+            isLeftEyeClosed: faceFeature.leftEyeClosed,
+            isRightEyeClosed: faceFeature.rightEyeClosed,
+            faceAngle: Double(faceFeature.faceAngle)
+        )
     }
 }

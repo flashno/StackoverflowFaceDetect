@@ -13,29 +13,45 @@ import SwiftUI
 struct UserDetailView: View {
     let user: User
     @StateObject private var imageLoader = ImageLoader()
-    @State private var faceMetadata: [FaceMetadata] = []
+    @State private var faceMetadata: FaceMetadata?
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                ImageSection(image: imageLoader.image, faces: faceMetadata)
+        VStack(spacing: 20) {
+            if let image = imageLoader.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxHeight: 300)
+                    .padding()
                 
-                VStack(alignment: .leading) {
-                    Text("Detection Results")
-                        .font(.title2.bold())
-                    
-                    ForEach(faceMetadata) { face in
-                        FaceMetadataView(metadata: face)
+                if let metadata = faceMetadata {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(metadata.hasFace ? "Face Detected ✓" : "No Face Detected ✗")
+                            .font(.title)
+                            .foregroundColor(metadata.hasFace ? .green : .red)
+                        
+                        if metadata.hasFace {
+                            Divider()
+                            
+                            Text("Smile: \(metadata.hasSmile ? "✓" : "✗")")
+                            Text("Left Eye: \(metadata.isLeftEyeClosed ? "Closed" : "Open")")
+                            Text("Right Eye: \(metadata.isRightEyeClosed ? "Closed" : "Open")")
+                            Text(String(format: "Face Angle: %.1f°", metadata.faceAngle))
+                        }
                     }
+                    .padding()
                 }
-                .padding()
+            } else {
+                ProgressView()
             }
+            
+            Spacer()
         }
         .navigationTitle(user.displayName)
         .task {
             await imageLoader.loadImage(from: user.profileImage)
             if let image = imageLoader.image {
-                faceMetadata = FaceDetector.shared.detectFaces(in: image)
+                faceMetadata = FaceDetector.shared.detectFaceFeatures(in: image)
             }
         }
     }
