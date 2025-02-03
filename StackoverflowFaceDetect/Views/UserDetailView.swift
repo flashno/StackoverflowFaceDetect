@@ -11,61 +11,63 @@ import SwiftUI
 
 struct UserDetailView: View {
     let user: User
-    @StateObject private var imageLoader = ImageLoader()
-    @State private var faceMetadata: FaceMetadata?
+    @ObservedObject var viewModel: UsersViewModel
     
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                if let image = imageLoader.image {
-                    Image(uiImage: image)
+                if let imageData = viewModel.userImagesData[user.id] {
+                    // Profile Image Section
+                    Image(uiImage: imageData.image)
                         .resizable()
                         .scaledToFit()
                         .frame(maxHeight: 300)
                         .padding()
-                } else {
-                    ProgressView()
-                }
-                
-                if let metadata = faceMetadata {
+                    
+                    // Face Detection Results Section
                     VStack(alignment: .leading, spacing: 10) {
-                        Text(metadata.hasFace ? "Face Detected ✓" : "No Face Detected ✗")
+                        // Main Face Detection Status
+                        Text(imageData.faceMetadata.hasFace ? "Face Detected ✓" : "No Face Detected ✗")
                             .font(.title)
-                            .foregroundColor(metadata.hasFace ? .green : .red)
+                            .foregroundColor(imageData.faceMetadata.hasFace ? .green : .red)
                         
-                        if metadata.hasFace {
+                        if imageData.faceMetadata.hasFace {
                             Divider()
                             
+                            // Detailed Face Features
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Facial Features:")
                                     .font(.headline)
-                                FeatureRow(label: "Smile", value: metadata.hasSmile)
-                                FeatureRow(label: "Left Eye Open", value: !metadata.isLeftEyeClosed)
-                                FeatureRow(label: "Right Eye Open", value: !metadata.isRightEyeClosed)
-                                Text("Face Angle: \(String(format: "%.1f°", metadata.faceAngle))")
+                                
+                                // Feature rows using the existing FeatureRow view
+                                FeatureRow(label: "Smile", value: imageData.faceMetadata.hasSmile)
+                                FeatureRow(label: "Left Eye Open", value: !imageData.faceMetadata.isLeftEyeClosed)
+                                FeatureRow(label: "Right Eye Open", value: !imageData.faceMetadata.isRightEyeClosed)
+                                
+                                // Face angle with formatted string
+                                Text("Face Angle: \(String(format: "%.1f°", imageData.faceMetadata.faceAngle))")
+                                    .font(.subheadline)
                             }
                         }
                     }
                     .padding()
+                    .background(Color(.systemBackground))
+                    .cornerRadius(10)
+                    .shadow(radius: 2)
+                    .padding(.horizontal)
+                } else {
+                    // Loading State
+                    ProgressView()
+                        .padding()
                 }
             }
         }
         .navigationTitle(user.displayName)
-        .task {
-            await imageLoader.loadImage(from: user.profileImage)
-            guard let image = imageLoader.image else { return }
-            
-            let metadata = await Task.detached {
-                FaceDetector.shared.detectFaceFeatures(in: image)
-            }.value
-            
-            await MainActor.run {
-                faceMetadata = metadata
-            }
-        }
+        .background(Color(.systemGroupedBackground))
     }
 }
 
+// Keep the existing FeatureRow view
 struct FeatureRow: View {
     let label: String
     let value: Bool
@@ -77,5 +79,6 @@ struct FeatureRow: View {
             Image(systemName: value ? "checkmark" : "xmark")
                 .foregroundColor(value ? .green : .red)
         }
+        .font(.subheadline)
     }
 }

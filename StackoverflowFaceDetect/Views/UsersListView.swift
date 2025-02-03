@@ -8,8 +8,6 @@
 import SwiftUICore
 import SwiftUI
 
-import SwiftUI
-
 struct UsersListView: View {
     @StateObject private var viewModel = UsersViewModel()
     
@@ -23,9 +21,9 @@ struct UsersListView: View {
                 } else {
                     List(viewModel.users) { user in
                         NavigationLink {
-                            UserDetailView(user: user)
+                            UserDetailView(user: user, viewModel: viewModel)
                         } label: {
-                            UserRowView(user: user)
+                            UserRowView(user: user, viewModel: viewModel)
                         }
                     }
                 }

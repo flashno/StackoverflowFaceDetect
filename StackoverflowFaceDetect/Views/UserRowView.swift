@@ -11,14 +11,13 @@ import SwiftUI
 
 struct UserRowView: View {
     let user: User
-    @StateObject private var imageLoader = ImageLoader()
-    @State private var hasFace = false
+    @ObservedObject var viewModel: UsersViewModel
     
     var body: some View {
         HStack {
             Group {
-                if let image = imageLoader.image {
-                    Image(uiImage: image)
+                if let imageData = viewModel.userImagesData[user.id] {
+                    Image(uiImage: imageData.image)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 50, height: 50)
@@ -38,25 +37,14 @@ struct UserRowView: View {
             
             Spacer()
             
-            Image(systemName: hasFace ? "checkmark.circle.fill" : "xmark.circle.fill")
-                .foregroundColor(hasFace ? .green : .red)
+            faceDetectionIcon
+
         }
-        // In UserRowView
-        .task {
-            await imageLoader.loadImage(from: user.profileImage)
-            guard let image = imageLoader.image else { return }
-            
-            // Add loading indicator
-            let metadata = await withCheckedContinuation { continuation in
-                DispatchQueue.global(qos: .userInitiated).async {
-                    let result = FaceDetector.shared.detectFaceFeatures(in: image)
-                    continuation.resume(returning: result)
-                }
-            }
-            
-            await MainActor.run {
-                hasFace = metadata.hasFace
-            }
-        }
+    }
+    // Computed property to handle the face detection icon logic
+    private var faceDetectionIcon: some View {
+        let hasFace = viewModel.userImagesData[user.id]?.faceMetadata.hasFace ?? false
+        return Image(systemName: hasFace ? "checkmark.circle.fill" : "xmark.circle.fill")
+            .foregroundColor(hasFace ? .green : .red)
     }
 }
