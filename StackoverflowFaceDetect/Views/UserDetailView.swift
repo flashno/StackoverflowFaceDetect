@@ -9,20 +9,23 @@ import SwiftUICore
 import UIKit
 import SwiftUI
 
-
 struct UserDetailView: View {
     let user: User
     @StateObject private var imageLoader = ImageLoader()
     @State private var faceMetadata: FaceMetadata?
     
     var body: some View {
-        VStack(spacing: 20) {
-            if let image = imageLoader.image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxHeight: 300)
-                    .padding()
+        ScrollView {
+            VStack(spacing: 20) {
+                if let image = imageLoader.image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxHeight: 300)
+                        .padding()
+                } else {
+                    ProgressView()
+                }
                 
                 if let metadata = faceMetadata {
                     VStack(alignment: .leading, spacing: 10) {
@@ -33,91 +36,46 @@ struct UserDetailView: View {
                         if metadata.hasFace {
                             Divider()
                             
-                            Text("Smile: \(metadata.hasSmile ? "✓" : "✗")")
-                            Text("Left Eye: \(metadata.isLeftEyeClosed ? "Closed" : "Open")")
-                            Text("Right Eye: \(metadata.isRightEyeClosed ? "Closed" : "Open")")
-                            Text(String(format: "Face Angle: %.1f°", metadata.faceAngle))
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Facial Features:")
+                                    .font(.headline)
+                                FeatureRow(label: "Smile", value: metadata.hasSmile)
+                                FeatureRow(label: "Left Eye Open", value: !metadata.isLeftEyeClosed)
+                                FeatureRow(label: "Right Eye Open", value: !metadata.isRightEyeClosed)
+                                Text("Face Angle: \(String(format: "%.1f°", metadata.faceAngle))")
+                            }
                         }
                     }
                     .padding()
                 }
-            } else {
-                ProgressView()
             }
-            
-            Spacer()
         }
         .navigationTitle(user.displayName)
         .task {
             await imageLoader.loadImage(from: user.profileImage)
-            if let image = imageLoader.image {
-                faceMetadata = FaceDetector.shared.detectFaceFeatures(in: image)
-            }
-        }
-    }
-}
-
-struct ImageSection: View {
-    let image: UIImage?
-    let faces: [FaceMetadata]
-    
-    var body: some View {
-        ZStack {
-            if let image {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .overlay(
-                        ForEach(faces) { face in
-                            Rectangle()
-                                .stroke(Color.green, lineWidth: 2)
-                                .frame(width: face.bounds.width, height: face.bounds.height)
-                                .offset(x: face.bounds.minX, y: face.bounds.minY)
-                        }
-                    )
-                    .background(GeometryReader { proxy in
-                        Color.clear
-                            .preference(key: ImageSizeKey.self, value: proxy.size)
-                    })
-            } else {
-                ProgressView()
-            }
-        }
-        .frame(maxHeight: 300)
-        .padding()
-    }
-}
-
-struct FaceMetadataView: View {
-    let metadata: FaceMetadata
-    
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text("Face #\(metadata.id)")
-                .font(.headline)
+            guard let image = imageLoader.image else { return }
             
-            Group {
-                Text("Bounds: \(formatRect(metadata.bounds))")
-                Text("Smile: \(metadata.hasSmile ? "✓" : "✗")")
-                Text("Left Eye: \(metadata.isLeftEyeClosed ? "Closed" : "Open")")
-                Text("Right Eye: \(metadata.isRightEyeClosed ? "Closed" : "Open")")
-                Text(formatAngle(metadata.faceAngle))
+            let metadata = await Task.detached {
+                FaceDetector.shared.detectFaceFeatures(in: image)
+            }.value
+            
+            await MainActor.run {
+                faceMetadata = metadata
             }
-            .font(.caption)
-            .padding(.leading)
         }
-        .padding()
-        .background(Color.gray.opacity(0.1))
-        .cornerRadius(8)
     }
+}
+
+struct FeatureRow: View {
+    let label: String
+    let value: Bool
     
-    private func formatRect(_ rect: CGRect) -> String {
-        String(format: "(%.1f, %.1f) [%.1f x %.1f]",
-               rect.origin.x, rect.origin.y,
-               rect.width, rect.height)
-    }
-    
-    private func formatAngle(_ angle: Double) -> String {
-        String(format: "Rotation: %.1f°", angle)
+    var body: some View {
+        HStack {
+            Text(label)
+            Spacer()
+            Image(systemName: value ? "checkmark" : "xmark")
+                .foregroundColor(value ? .green : .red)
+        }
     }
 }
