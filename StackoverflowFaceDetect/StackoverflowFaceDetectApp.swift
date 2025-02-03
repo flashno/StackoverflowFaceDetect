@@ -11,7 +11,7 @@ import SwiftUI
 struct StackoverflowFaceDetectApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView() // This now contains our navigation stack
         }
     }
 }
