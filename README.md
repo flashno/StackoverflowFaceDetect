@@ -36,7 +36,7 @@ open StackoverflowFaceDetect.xcodeproj
 No additional setup or third-party dependencies are required as the project uses native iOS frameworks.
 
 
-## Completed in 3 Hours
+## Completed in 3 Hours (I took breaks in between working on it, as I didn't have a 3 hour chunk to finish the whole thing)
 
 - Core API integration
 - Basic face detection
