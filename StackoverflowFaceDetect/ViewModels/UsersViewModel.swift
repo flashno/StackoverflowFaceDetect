@@ -207,25 +207,6 @@ class UsersViewModel: ObservableObject {
     }
 }
 
-
-// Thread-safe counter
-actor Counter {
-    private var count = 0
-    private let max: Int
-    
-    init(max: Int) { self.max = max }
-    
-    func increment() async throws {
-        while count >= max {
-            await Task.yield() // Allow other tasks to progress
-        }
-        count += 1
-    }
-    
-    func decrement() {
-        count -= 1
-    }
-}
 // MARK: - Helper Extensions
 
 extension Array {
