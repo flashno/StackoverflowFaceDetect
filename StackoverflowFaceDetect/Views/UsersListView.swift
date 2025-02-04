@@ -5,7 +5,6 @@
 //  Created by Rik Basu on 2/3/25.
 //
 
-import SwiftUICore
 import SwiftUI
 
 struct UsersListView: View {
@@ -14,7 +13,7 @@ struct UsersListView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if viewModel.isLoading {
+                if viewModel.isInitialLoading {
                     ProgressView()
                 } else if let error = viewModel.error {
                     ErrorView(error: error)
@@ -33,7 +32,6 @@ struct UsersListView: View {
         .task { await viewModel.fetchUsers() }
     }
 }
-
 struct ErrorView: View {
     let error: Error
     

@@ -5,7 +5,6 @@
 //  Created by Rik Basu on 2/3/25.
 //
 
-import SwiftUICore
 import UIKit
 import SwiftUI
 
@@ -34,20 +33,8 @@ struct UserDetailView: View {
                         if imageData.faceMetadata.hasFace {
                             Divider()
                             
-                            // Detailed Face Features
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Facial Features:")
-                                    .font(.headline)
-                                
-                                // Feature rows using the existing FeatureRow view
-                                FeatureRow(label: "Smile", value: imageData.faceMetadata.hasSmile)
-                                FeatureRow(label: "Left Eye Open", value: !imageData.faceMetadata.isLeftEyeClosed)
-                                FeatureRow(label: "Right Eye Open", value: !imageData.faceMetadata.isRightEyeClosed)
-                                
-                                // Face angle with formatted string
-                                Text("Face Angle: \(String(format: "%.1f°", imageData.faceMetadata.faceAngle))")
-                                    .font(.subheadline)
-                            }
+                            FacialFeaturesView(metadata: imageData.faceMetadata)
+
                         }
                     }
                     .padding()
@@ -80,5 +67,23 @@ struct FeatureRow: View {
                 .foregroundColor(value ? .green : .red)
         }
         .font(.subheadline)
+    }
+}
+
+struct FacialFeaturesView: View {
+    let metadata: FaceMetadata
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Facial Features:")
+                .font(.headline)
+                
+            FeatureRow(label: "Smile", value: metadata.hasSmile)
+            FeatureRow(label: "Left Eye Open", value: !metadata.isLeftEyeClosed)
+            FeatureRow(label: "Right Eye Open", value: !metadata.isRightEyeClosed)
+            
+            Text("Face Angle: \(String(format: "%.1f°", metadata.faceAngle))")
+                .font(.subheadline)
+        }
     }
 }
