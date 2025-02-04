@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9929C3302D51476900F44925 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929C32F2D51476900F44925 /* User.swift */; };
+		9929C3322D51477A00F44925 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929C3312D51477A00F44925 /* APIService.swift */; };
+		9929C3342D51479B00F44925 /* FaceDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929C3332D51479B00F44925 /* FaceDetector.swift */; };
+		9929C3362D5147A600F44925 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929C3352D5147A600F44925 /* ImageLoader.swift */; };
+		9929C3382D5147B000F44925 /* UsersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929C3372D5147B000F44925 /* UsersListView.swift */; };
+		9929C33A2D5147DA00F44925 /* UserDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929C3392D5147DA00F44925 /* UserDetailView.swift */; };
+		9929C33C2D5147E400F44925 /* UsersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929C33B2D5147E400F44925 /* UsersViewModel.swift */; };
+		9929C3422D514BCB00F44925 /* CGImagePropertyOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929C3412D514BC400F44925 /* CGImagePropertyOrientation.swift */; };
+		9929C3442D515A9400F44925 /* UserRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929C3432D515A9400F44925 /* UserRowView.swift */; };
+		9929C3482D515B1000F44925 /* FaceMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929C3472D515B1000F44925 /* FaceMetadata.swift */; };
+		9929C34A2D51864400F44925 /* UserImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9929C3492D51864400F44925 /* UserImageData.swift */; };
 		99974FC72D512AAA003443BF /* StackoverflowFaceDetectApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99974FC62D512AAA003443BF /* StackoverflowFaceDetectApp.swift */; };
 		99974FC92D512AAA003443BF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99974FC82D512AAA003443BF /* ContentView.swift */; };
 		99974FCB2D512AAE003443BF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 99974FCA2D512AAE003443BF /* Assets.xcassets */; };
@@ -14,6 +25,17 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9929C32F2D51476900F44925 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		9929C3312D51477A00F44925 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
+		9929C3332D51479B00F44925 /* FaceDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetector.swift; sourceTree = "<group>"; };
+		9929C3352D5147A600F44925 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		9929C3372D5147B000F44925 /* UsersListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersListView.swift; sourceTree = "<group>"; };
+		9929C3392D5147DA00F44925 /* UserDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailView.swift; sourceTree = "<group>"; };
+		9929C33B2D5147E400F44925 /* UsersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersViewModel.swift; sourceTree = "<group>"; };
+		9929C3412D514BC400F44925 /* CGImagePropertyOrientation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGImagePropertyOrientation.swift; sourceTree = "<group>"; };
+		9929C3432D515A9400F44925 /* UserRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRowView.swift; sourceTree = "<group>"; };
+		9929C3472D515B1000F44925 /* FaceMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceMetadata.swift; sourceTree = "<group>"; };
+		9929C3492D51864400F44925 /* UserImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserImageData.swift; sourceTree = "<group>"; };
 		99974FC32D512AAA003443BF /* StackoverflowFaceDetect.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StackoverflowFaceDetect.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		99974FC62D512AAA003443BF /* StackoverflowFaceDetectApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackoverflowFaceDetectApp.swift; sourceTree = "<group>"; };
 		99974FC82D512AAA003443BF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -32,6 +54,52 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9929C32A2D5146D900F44925 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9929C3492D51864400F44925 /* UserImageData.swift */,
+				9929C3472D515B1000F44925 /* FaceMetadata.swift */,
+				9929C32F2D51476900F44925 /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9929C32B2D5146E200F44925 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9929C3352D5147A600F44925 /* ImageLoader.swift */,
+				9929C3332D51479B00F44925 /* FaceDetector.swift */,
+				9929C3312D51477A00F44925 /* APIService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		9929C32C2D5146EA00F44925 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				9929C33B2D5147E400F44925 /* UsersViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		9929C32D2D5146F600F44925 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9929C3432D515A9400F44925 /* UserRowView.swift */,
+				9929C3392D5147DA00F44925 /* UserDetailView.swift */,
+				9929C3372D5147B000F44925 /* UsersListView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9929C32E2D5146FE00F44925 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				9929C3412D514BC400F44925 /* CGImagePropertyOrientation.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		99974FBA2D512AA9003443BF = {
 			isa = PBXGroup;
 			children = (
@@ -51,6 +119,11 @@
 		99974FC52D512AAA003443BF /* StackoverflowFaceDetect */ = {
 			isa = PBXGroup;
 			children = (
+				9929C32E2D5146FE00F44925 /* Utilities */,
+				9929C32D2D5146F600F44925 /* Views */,
+				9929C32C2D5146EA00F44925 /* ViewModels */,
+				9929C32B2D5146E200F44925 /* Services */,
+				9929C32A2D5146D900F44925 /* Models */,
 				99974FC62D512AAA003443BF /* StackoverflowFaceDetectApp.swift */,
 				99974FC82D512AAA003443BF /* ContentView.swift */,
 				99974FCA2D512AAE003443BF /* Assets.xcassets */,
@@ -137,8 +210,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9929C3342D51479B00F44925 /* FaceDetector.swift in Sources */,
 				99974FC92D512AAA003443BF /* ContentView.swift in Sources */,
+				9929C34A2D51864400F44925 /* UserImageData.swift in Sources */,
+				9929C3362D5147A600F44925 /* ImageLoader.swift in Sources */,
+				9929C3482D515B1000F44925 /* FaceMetadata.swift in Sources */,
+				9929C3422D514BCB00F44925 /* CGImagePropertyOrientation.swift in Sources */,
 				99974FC72D512AAA003443BF /* StackoverflowFaceDetectApp.swift in Sources */,
+				9929C33A2D5147DA00F44925 /* UserDetailView.swift in Sources */,
+				9929C3322D51477A00F44925 /* APIService.swift in Sources */,
+				9929C3302D51476900F44925 /* User.swift in Sources */,
+				9929C33C2D5147E400F44925 /* UsersViewModel.swift in Sources */,
+				9929C3442D515A9400F44925 /* UserRowView.swift in Sources */,
+				9929C3382D5147B000F44925 /* UsersListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
